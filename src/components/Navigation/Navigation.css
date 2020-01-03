@@ -1,0 +1,14 @@
+.navigation {
+    display: 'flex';
+    justify-content: 'flex-start';
+}
+
+.App-logo {
+    min-width: 200px;
+    min-height: 200px;
+    /* width: 25vmin;  */
+    /* pointer-events: none;
+    vertical-align: left; */
+    /* float: left; */
+    margin-left: 2vmin;
+  }

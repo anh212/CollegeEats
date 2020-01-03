@@ -1,0 +1,7 @@
+.cardContainer {
+    display: inline-flex;
+    /* flex-wrap: wrap; */
+    justify-content: center;
+    /* justify-content: space-evenly; */
+    /* background-color: #2C2F33; */
+}
