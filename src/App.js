@@ -10,7 +10,7 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      school: 'lehigh'
+      schoolName: 'lehigh'
     }
   }
 
@@ -20,7 +20,7 @@ class App extends React.Component {
         {/* <Background /> */}
         <Navigation />
         <Greeting />
-        <CardContainer schoolName={this.state.school}/>
+        <CardContainer schoolName={this.state.schoolName}/>
 
         {/* <div className="App-header">
 
