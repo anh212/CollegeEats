@@ -6,7 +6,7 @@ class CardContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            schoolName: props.schoolName,
+            schoolName: this.props.schoolName,
             nameLocation: []
         }
 
@@ -36,7 +36,7 @@ class CardContainer extends React.Component {
                     <Card />
                     <Card /> */}
                     {this.state.nameLocation.map((nameLocation, keyID) => {
-                        return <Card diningName={nameLocation.dining_name} locationName={nameLocation.location_name} key={keyID} />
+                        return <Card schoolName={this.state.schoolName} diningName={nameLocation.dining_name} locationName={nameLocation.location_name} key={keyID} />
                     })}
                 </div>
             </div>
