@@ -7,13 +7,20 @@ import CardContainer from './components/CardContainer/CardContainer';
 import Greeting from './components/Greeting/Greeting';
 
 class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      school: 'lehigh'
+    }
+  }
+
   render() {
     return (
       <div className="App">
         {/* <Background /> */}
         <Navigation />
         <Greeting />
-        <CardContainer />
+        <CardContainer schoolName={this.state.school}/>
 
         {/* <div className="App-header">
 
