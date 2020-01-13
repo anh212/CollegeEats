@@ -29,7 +29,7 @@
     font-weight: 500;
 }
 
-.openPlace {
+.open {
     background-color: #0dd60d;
     animation: blinking 0.8s linear infinite;
     animation-direction: alternate;
@@ -40,6 +40,6 @@
     to {opacity: 0;}
 }
 
-.closedPlace {
+.closed {
     background-color: red;
 }
