@@ -21,14 +21,14 @@ class Card extends React.Component {
     })
       .then(response => response.json())
       .then(response => {
-        console.log(response)
+        // console.log(response)
         this.setState({ schedule: response })
       })
       .then(() => {
         let isOpen = this.isOpen(this.state.schedule);
-        console.log(this.state.schedule.length)
+        // console.log(this.state.schedule.length)
         let description = this.getDescription(this.state.schedule, this.state.isOpen);
-        console.log(description)
+        // console.log(description)
 
         this.setState({
           isOpen: isOpen,
@@ -77,9 +77,9 @@ class Card extends React.Component {
           closingTime.setHours(0, 0, 0);
         }
 
-        console.log(openingTime)
-        console.log(currentTime)
-        console.log(closingTime)
+        // console.log(openingTime)
+        // console.log(currentTime)
+        // console.log(closingTime)
 
         if (openingTime <= currentTime && currentTime < closingTime) {
           return true;
@@ -90,7 +90,7 @@ class Card extends React.Component {
     return false;
   }
 
-  getDescription = (schedule, isOpen) => {
+  getDescription = (schedule, isOpen) => {  //FIX
     let description = '';
 
     let currentTime = new Date();
@@ -102,15 +102,27 @@ class Card extends React.Component {
     if (isOpen) {
       for (let i = 0; i < schedule.length; i++) {
         let day = schedule[i].daynum;
-        console.log(day)
+        // console.log(day)
+        // console.log(currentDay)
         if (day === currentDay) {
 
-          let endTime = this.convertToHoursMinutes(schedule[i].endtime);
+          let endTime = this.convertToHoursMinutes(parseFloat(schedule[i].endtime));
           let hour = endTime[0];
           let minutes = endTime[1];
 
+          console.log(currentHour + (currentMinutes / 60))
+
+          let nextDay = false;
+
+          if (currentHour + (currentMinutes / 60) > parseFloat(schedule[i].endtime)) {
+            nextDay = true;
+            continue;
+          }
+
+          console.log(schedule[i])
+
           if (hour < 24) {
-            description += 'Closes today at ';
+            description += 'Closes ' + (nextDay ? 'tomorrow' : 'today') + ' at ';
 
             if (hour === 12) {
               description += (hour + ':00 PM');
@@ -122,8 +134,9 @@ class Card extends React.Component {
           } else if (hour === 24) {
             description += 'Closes tomorrow at 12:00AM';
           }
+          return description;
+
         }
-        return description;
       }
     } else {
       for (let i = 0; i < schedule.length; i++) {
