@@ -7,10 +7,8 @@ class CardContainer extends React.Component {
         super(props);
         this.state = {
             schoolName: this.props.schoolName,
-            nameLocation: []
+            nameLocations: []
         }
-
-        this.getLocations(this.state.schoolName);
     }
 
     getLocations = (schoolName) => {
@@ -19,10 +17,14 @@ class CardContainer extends React.Component {
           headers: { 'Content-type': 'application/json' },
         })
           .then(response => response.json())
-          .then(response => {this.setState({nameLocation: response})})
+          .then(response => {this.setState({nameLocations: response})})
           .catch(err => console.log(err))
-      }
+    }
 
+    componentDidMount() {
+        this.getLocations(this.state.schoolName);
+    }
+      
     render() {
         // console.log(this.getLocations(this.state.schoolName));
 
@@ -35,7 +37,7 @@ class CardContainer extends React.Component {
                     <Card />
                     <Card />
                     <Card /> */}
-                    {this.state.nameLocation.map((nameLocation, keyID) => {
+                    {this.state.nameLocations.map((nameLocation, keyID) => {
                         return <Card schoolName={this.state.schoolName} diningName={nameLocation.dining_name} locationName={nameLocation.location_name} key={keyID} />
                     })}
                 </div>
