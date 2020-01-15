@@ -22,15 +22,11 @@ class Card extends React.Component {
     })
       .then(response => response.json())
       .then(response => {
-        // console.log(response)
         this.setState({ schedule: response })
       })
       .then(() => {
         let isOpen = this.isOpen(this.state.schedule);
-        console.log(isOpen)
-        // console.log(this.state.schedule.length)
         let description = this.getDescription(this.state.schedule, isOpen);
-        // console.log(description)
 
         this.setState({
           isOpen: isOpen,
@@ -44,10 +40,6 @@ class Card extends React.Component {
   isOpen = (schedule) => {
     let currentTime = new Date();
     let currentDay = currentTime.getDay();
-    // let currentHour = date.getHours();
-    // let currentMinutes = date.getMinutes();
-
-    // console.log(day + hour)
 
     //Comparing current day to schedule
     for (let i = 0; i < schedule.length; i++) {
@@ -75,31 +67,30 @@ class Card extends React.Component {
           endTime -= (endTime % 1);
         }
 
-        openingTime.setHours(startTime, startMinutes, 0);
-        closingTime.setHours(endTime, endMinutes, 0)
-
-        if (endTime === 24) {
-          closingTime.setDate(closingTime.getDate() + 1);
-          closingTime.setHours(0, 0, 0);
+        if (startTime === 24) {
+          openingTime.setHours(0, 0, 0);
+        } else {
+          openingTime.setHours(startTime, startMinutes, 0);
         }
 
-        // console.log(openingTime)
-        // console.log(currentTime)
-        // console.log(closingTime)
+        if (endTime === 24) {
+          closingTime.setDate(currentTime.getDate() + 1);
+          closingTime.setHours(0, 0, 0);
+        } else {
+          closingTime.setHours(endTime, endMinutes, 0)
+        }
 
         if (openingTime <= currentTime && currentTime < closingTime) {
           return true;
         }
       }
     }
-
     return false;
   }
 
   //Creates string for when dining location will open or closed depending on
   //if location is currently open or closed
   getDescription = (schedule, isOpen) => {
-    console.log(isOpen)
     let description = '';
 
     let currentTime = new Date();
@@ -111,15 +102,13 @@ class Card extends React.Component {
     if (isOpen) {
       for (let i = 0; i < schedule.length; i++) {
         let day = schedule[i].daynum;
-        // console.log(day)
-        // console.log(currentDay)
+
         if (day === currentDay) {
 
           let endTime = this.convertToHoursMinutes(parseFloat(schedule[i].endtime));
           let hour = endTime[0];
           let minutes = endTime[1];
 
-          // console.log(currentHour + (currentMinutes / 60))
 
           let nextDay = false;
 
@@ -127,8 +116,6 @@ class Card extends React.Component {
             nextDay = true;
             continue;
           }
-
-          // console.log(schedule[i])
 
           if (hour < 24) {
             description += 'Closes ' + (nextDay ? 'tomorrow' : 'today') + ' at ';
@@ -150,8 +137,6 @@ class Card extends React.Component {
     } else {
       for (let i = 0; i < schedule.length; i++) {
         let day = schedule[i].daynum;
-        console.log(day)
-        console.log(currentDay)
 
         let startHourAndMinute = this.convertToHoursMinutes(parseFloat(schedule[i].starttime));
         let endHourAndMinute = this.convertToHoursMinutes(parseFloat(schedule[i].endtime));
@@ -194,52 +179,19 @@ class Card extends React.Component {
             let startHour = openHourAndMinutes[0];
             let startMinutes = openHourAndMinutes[1];
 
-
             description += 'Opens today at '; //need to convert military time to standard time
 
             if (startHour === 12) {
               description += startHour + ':' + (startMinutes === 0 ? '00' : startMinutes) + 'PM';
             } else if (startHour > 12) {
-              description += ((startHour - 12) + (startMinutes === 0 ? '00' : startMinutes) + 'PM');
+              description += ((startHour - 12) + ':' + (startMinutes === 0 ? '00' : startMinutes) + 'PM');
             } else if (startHour < 12) {
-              description += (startHour + (startMinutes === 0 ? '00' : startMinutes) + 'AM');
+              description += (startHour + ':' + (startMinutes === 0 ? '00' : startMinutes) + 'AM');
             }
           }
           return description;
 
         }
-
-        // if (currentDay.getDay() < day) {
-        //   let startTime = schedule[i].starttime;
-        //   let startMinutes = 0;
-
-        //   if (startTime % 1 > 0) {
-        //     startMinutes = (startTime % 1) * 60;
-        //     startTime -= (startTime % 1);
-        //   }
-
-        //   description += 'Opens tomorrow at ' + startTime + ':' + (startMinutes === 0 ? '00' : startMinutes) + 'AM';
-        // } else {
-
-        // }
-
-
-        // let openingTime = new Date();
-
-        // let startTime = schedule[i].starttime;
-        // let startMinutes = 0;
-
-        // if (startTime % 1 > 0) {
-        //   startMinutes = (startTime % 1) * 60;
-        //   startTime -= (startTime % 1);
-        // }
-
-        // closingTime.setHours(endTime, endMinutes, 0)
-
-        // if (endTime === 24) {
-        //   closingTime.setDate(closingTime.getDate() + 1);
-        //   closingTime.setHours(0, 0, 0);
-        // }
       }
     }
   }
