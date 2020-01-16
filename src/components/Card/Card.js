@@ -119,7 +119,7 @@ class Card extends React.Component {
           let endHour = endTime[0];
           let endMinutes = endTime[1];
 
-          //Edge case for Hawk's Nest when 
+          //Edge case for Hawk's Nest when Sunday morning schedule is last in schedule array
           if (currentHour + (currentMinutes / 60) < parseFloat(schedule[i].starttime)) {
             if (startHour !== 24) {
               if (i === schedule.length) {  //if for loop reaches last element, loop back to beginning
