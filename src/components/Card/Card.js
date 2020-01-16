@@ -100,42 +100,71 @@ class Card extends React.Component {
 
 
     if (isOpen) {
+      let nextDay = false;
+
       for (let i = 0; i < schedule.length; i++) {
         let day = schedule[i].daynum;
 
         if (day === currentDay) {
+          //If dining location is closed for the day; starttime and endtime will both be 0
+          if (schedule[i].starttime === 0 && schedule[i].endtime === 0) {
+            return false;
+          }
+
+          let startTime = this.convertToHoursMinutes(parseFloat(schedule[i].starttime));
+          let startHour = startTime[0];
+          let startMinutes = startTime[1];
 
           let endTime = this.convertToHoursMinutes(parseFloat(schedule[i].endtime));
-          let hour = endTime[0];
-          let minutes = endTime[1];
+          let endHour = endTime[0];
+          let endMinutes = endTime[1];
 
-
-          let nextDay = false;
+          //Edge case for Hawk's Nest when 
+          if (currentHour + (currentMinutes / 60) < parseFloat(schedule[i].starttime)) {
+            if (startHour !== 24) {
+              if (i === schedule.length) {  //if for loop reaches last element, loop back to beginning
+                i = 0;
+              }
+              continue;
+            }
+          }
 
           if (currentHour + (currentMinutes / 60) > parseFloat(schedule[i].endtime)) {
             nextDay = true;
+            
+            if (i === schedule.length) {  //if for loop reaches last element, loop back to beginning
+              i = 0;
+            }
+
             continue;
           }
 
-          if (hour < 24) {
+        
+          if (endHour < 24) {
             description += 'Closes ' + (nextDay ? 'tomorrow' : 'today') + ' at ';
 
-            if (hour === 12) {
-              description += (hour + ':00 PM');
-            } else if (hour > 12) {
-              description += ((hour - 12) + ':' + (minutes === 0 ? '00' : minutes) + 'PM');
-            } else if (hour < 12) {
-              description += (hour + ':' + (minutes === 0 ? '00' : minutes) + 'AM');
+            if (endHour === 12) {
+              description += (endHour + ':00 PM');
+            } else if (endHour > 12) {
+              description += ((endHour - 12) + ':' + (endMinutes === 0 ? '00' : endMinutes) + 'PM');
+            } else if (endHour < 12) {
+              description += (endHour + ':' + (endMinutes === 0 ? '00' : endMinutes) + 'AM');
             }
-          } else if (hour === 24) {
+          } else if (endHour === 24) {
             description += 'Closes tomorrow at 12:00AM';
           }
+          nextDay = false;
           return description;
 
         }
       }
     } else {
       for (let i = 0; i < schedule.length; i++) {
+        //If dining location is closed for the day; starttime and endtime will both be 0
+        if (schedule[i].starttime === 0 && schedule[i].endtime === 0) {
+          return 'Closed today';
+        }
+
         let day = schedule[i].daynum;
 
         let startHourAndMinute = this.convertToHoursMinutes(parseFloat(schedule[i].starttime));
@@ -193,6 +222,9 @@ class Card extends React.Component {
 
         }
       }
+      //If current day does not matches any of the days in schedule array,
+      //then dining location is closed that day
+      return 'Closed today'
     }
   }
 
