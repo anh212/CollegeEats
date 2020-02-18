@@ -8,7 +8,7 @@ class Card extends React.Component {
       schoolName: this.props.schoolName,
       diningName: this.props.diningName,
       location: this.props.locationName,
-      isOpen: true,
+      isOpen: null,
       schedule: [],
       description: '',
     }
@@ -160,10 +160,7 @@ class Card extends React.Component {
       }
     } else {
       for (let i = 0; i < schedule.length; i++) {
-        //If dining location is closed for the day; starttime and endtime will both be 0
-        if (schedule[i].starttime === 0 && schedule[i].endtime === 0) {
-          return 'Closed today';
-        }
+        
 
         let day = schedule[i].daynum;
 
@@ -178,6 +175,11 @@ class Card extends React.Component {
 
 
         if (day === currentDay) {
+          //If dining location is closed for the day; starttime and endtime will both be 0
+          if (parseFloat(schedule[i].starttime) === 0 && parseFloat(schedule[i].endtime) === 0) {
+            return 'Closed today';
+          }
+
           if (currentHour + (currentMinutes / 60) >= parseFloat(schedule[i].endtime)) {
 
             //When current time is past closing time on current day
@@ -204,12 +206,11 @@ class Card extends React.Component {
               }
             }
           } else {  //Current time has to be less than start time on current day
-            let openHourAndMinutes = this.convertToHoursMinutes(schedule[i].starttime);
+            let openHourAndMinutes = this.convertToHoursMinutes(parseFloat(schedule[i].starttime));
             let startHour = openHourAndMinutes[0];
             let startMinutes = openHourAndMinutes[1];
 
             description += 'Opens today at '; //need to convert military time to standard time
-
             if (startHour === 12) {
               description += startHour + ':' + (startMinutes === 0 ? '00' : startMinutes) + 'PM';
             } else if (startHour > 12) {
