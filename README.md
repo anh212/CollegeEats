@@ -1,5 +1,5 @@
 # CollegeEats (Front-end)
-A web app to display whether all on/off campus dining locations are open or closed on a single page
+A web app to display whether all on campus dining locations are open or closed on a single page
 
 ![Front page](/public/screenshot.png)
 
