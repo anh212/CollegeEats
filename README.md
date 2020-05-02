@@ -1,6 +1,8 @@
 # CollegeEats (Front-end)
 A web app to display whether all on/off campus dining locations are open or closed on a single page
 
+![Front page](/public/screenshot.png)
+
 # My goals for this project
 - To further solidify my proficiency with React.js
 
@@ -20,3 +22,6 @@ npm start
 Open http://localhost:3000 to view it in the browser.
 
 - Also need back-end components and PostgreSQL database to get the website fully functional
+
+# Skills I would like to work on 
+- Front-end UI design
